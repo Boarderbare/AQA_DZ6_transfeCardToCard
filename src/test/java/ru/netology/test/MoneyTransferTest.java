@@ -18,6 +18,7 @@ class MoneyTransferTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationCode = DataHelper.getVerificationCode(authInfo);
         loginPage.validLogin(authInfo).codeVerify(verificationCode);
+        CardTransferPage.CardBalanceEqual();
     }
 
     @Test
@@ -30,12 +31,12 @@ class MoneyTransferTest {
         DashBoard.transferBetweenCards(numberCartTo);
 
         CardTransferPage.transferMoney(amountTransfer, cardFirstBeforeTransfer.getNumber());
-        DataHelper.Card cardFirstAfterTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondAfterTransfer = DataHelper.getCard(2);
+        var cardBalanceFirstAfterTransfer = DataHelper.getCard(1).getBalabce();
+        var cardBalanceSecondAfterTransfer = DataHelper.getCard(2).getBalabce();
 
-        assertEquals(cardFirstBeforeTransfer.getBalabce() - amountTransfer, cardFirstAfterTransfer.getBalabce());
-        assertEquals(cardSecondBeforeTransfer.getBalabce() + amountTransfer, cardSecondAfterTransfer.getBalabce());
-        assertTrue(cardSecondAfterTransfer.getBalabce() > 0 && cardFirstAfterTransfer.getBalabce() > 0);
+        assertEquals(cardFirstBeforeTransfer.getBalabce()-amountTransfer,cardBalanceFirstAfterTransfer);
+        assertEquals(cardSecondBeforeTransfer.getBalabce() + amountTransfer, cardBalanceSecondAfterTransfer);
+        assertTrue(cardBalanceFirstAfterTransfer > 0 && cardBalanceSecondAfterTransfer > 0);
     }
 
     @Test
@@ -49,11 +50,11 @@ class MoneyTransferTest {
         DashBoard.transferBetweenCards(numberCartTo);
 
         CardTransferPage.transferMoney(amountTransfer, cardSecondBeforeTransfer.getNumber());
-        DataHelper.Card cardFirstAfterTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondAfterTransfer = DataHelper.getCard(2);
+        var cardBalanceFirstAfterTransfer = DataHelper.getCard(1).getBalabce();
+        var cardBalanceSecondAfterTransfer = DataHelper.getCard(2).getBalabce();
 
-        assertEquals(cardFirstBeforeTransfer.getBalabce() + amountTransfer, cardFirstAfterTransfer.getBalabce());
-        assertEquals(cardSecondBeforeTransfer.getBalabce() - amountTransfer, cardSecondAfterTransfer.getBalabce());
-        assertTrue(cardSecondAfterTransfer.getBalabce() > 0 && cardFirstAfterTransfer.getBalabce() > 0);
+        assertEquals(cardFirstBeforeTransfer.getBalabce()+amountTransfer,cardBalanceFirstAfterTransfer);
+        assertEquals(cardSecondBeforeTransfer.getBalabce() - amountTransfer, cardBalanceSecondAfterTransfer);
+        assertTrue(cardBalanceFirstAfterTransfer > 0 && cardBalanceSecondAfterTransfer > 0);
     }
 }

@@ -53,6 +53,8 @@ class MoneyTransferNegativeTest {
         DataHelper.Card cardFirstAfterTransfer = DataHelper.getCard(1);
         DataHelper.Card cardSecondAfterTransfer = DataHelper.getCard(2);
 
+        assertEquals(cardFirstBeforeTransfer.getBalabce(), cardFirstAfterTransfer.getBalabce());
+        assertEquals(cardSecondBeforeTransfer.getBalabce(), cardSecondAfterTransfer.getBalabce());
         assertFalse(cardSecondAfterTransfer.getBalabce() > 0 && cardFirstAfterTransfer.getBalabce() > 0);
     }
 
