@@ -1,7 +1,10 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 import ru.netology.data.DataHelper;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
@@ -19,24 +22,33 @@ public class CardTransferPage {
     private static final SelenideElement numberCardField = $("[data-test-id='from'] input");
     private static final SelenideElement buttonTransfer = $("[data-test-id='action-transfer']");
 
-    public static void transferMoney(int amount, String number) {
+    public static void clearField() {
+        amountField.sendKeys(Keys.CONTROL + "A");
+        amountField.sendKeys(Keys.DELETE);
+        numberCardField.sendKeys(Keys.CONTROL + "A");
+        numberCardField.sendKeys(Keys.DELETE);
+    }
 
+
+    public static void transferMoney(int amount, String number) {
+        clearField();
         amountField.setValue(String.valueOf(amount));
         numberCardField.setValue(number);
         buttonTransfer.click();
     }
-    public static void CardBalanceEqual(){
+
+    public static void CardBalanceEqual() {
         var cardFirstBalance = DataHelper.getCard(1).getBalabce();
         var cardSecondBalance = DataHelper.getCard(2).getBalabce();
-        var cardFirstNumber =DataHelper.getCard(1).getNumber();
-        var cardSecondNumber =DataHelper.getCard(2).getNumber();
+        var cardFirstNumber = DataHelper.getCard(1).getNumber();
+        var cardSecondNumber = DataHelper.getCard(2).getNumber();
 
-        if (cardFirstBalance>10_000){
-            var amountTransfer=cardFirstBalance-10_000;
+        if (cardFirstBalance > 10_000) {
+            var amountTransfer = cardFirstBalance - 10_000;
             DashBoard.transferBetweenCards(2);
-            transferMoney(amountTransfer,cardFirstNumber );
+            transferMoney(amountTransfer, cardFirstNumber);
         }
-        if (cardSecondBalance>10_000) {
+        if (cardSecondBalance > 10_000) {
             var amountTransfer = cardSecondBalance - 10_000;
             DashBoard.transferBetweenCards(1);
             transferMoney(amountTransfer, cardSecondNumber);

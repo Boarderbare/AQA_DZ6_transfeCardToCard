@@ -17,7 +17,6 @@ public class DashBoard {
     private SelenideElement titleSecond = $(byText("Ваши карты"));
     private static ElementsCollection list = $$(".list div[data-test-id]").filter(visible);
 
-
     public DashBoard() {
         title.shouldBe(visible);
         titleSecond.shouldBe(visible);
@@ -36,15 +35,10 @@ public class DashBoard {
     public static int extractBalance(String text) {
         String balansPart = text.split(":")[1];
         return Integer.parseInt(balansPart.substring(0, balansPart.indexOf("р.")).trim());
-
     }
 
     public static CardTransferPage transferBetweenCards(int numberOrderCard) {
         list.get(numberOrderCard - 1).find("button").click();
         return new CardTransferPage();
-    }
-
-    public static String ErrorOnPage() {
-        return $(byText("Ошибка")).shouldBe(visible).text();
     }
 }

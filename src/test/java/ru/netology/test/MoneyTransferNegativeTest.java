@@ -18,6 +18,7 @@ class MoneyTransferNegativeTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationCode = DataHelper.getVerificationCode(authInfo);
         loginPage.validLogin(authInfo).codeVerify(verificationCode);
+        CardTransferPage.CardBalanceEqual();
     }
 
     @Test
@@ -25,18 +26,17 @@ class MoneyTransferNegativeTest {
 
         var amountTransfer = 300;
         var numberCartTo = 1;
-
-        DataHelper.Card cardFirstBeforeTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondBeforeTransfer = DataHelper.getCard(2);
+        var cardFirstBeforeTransfer = DataHelper.getCard(1);
+        var cardSecondBeforeTransfer = DataHelper.getCard(2);
         DashBoard.transferBetweenCards(numberCartTo);
 
         CardTransferPage.transferMoney(amountTransfer, cardFirstBeforeTransfer.getNumber());
-        DataHelper.Card cardFirstAfterTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondAfterTransfer = DataHelper.getCard(2);
+        var cardBalanceFirstAfterTransfer = DataHelper.getCard(1).getBalabce();
+        var cardBalanceSecondAfterTransfer = DataHelper.getCard(2).getBalabce();
 
-        assertEquals(cardFirstBeforeTransfer.getBalabce(), cardFirstAfterTransfer.getBalabce());
-        assertEquals(cardSecondBeforeTransfer.getBalabce(), cardSecondAfterTransfer.getBalabce());
-        assertTrue(cardSecondAfterTransfer.getBalabce() > 0 && cardFirstAfterTransfer.getBalabce() > 0);
+        assertEquals(cardFirstBeforeTransfer.getBalabce(), cardBalanceFirstAfterTransfer);
+        assertEquals(cardSecondBeforeTransfer.getBalabce(), cardBalanceSecondAfterTransfer);
+        assertTrue(cardBalanceSecondAfterTransfer > 0 && cardBalanceFirstAfterTransfer > 0);
     }
 
     @Test
@@ -44,18 +44,12 @@ class MoneyTransferNegativeTest {
 
         var amountTransfer = 30000;
         var numberCartTo = 1;
-
-        DataHelper.Card cardFirstBeforeTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondBeforeTransfer = DataHelper.getCard(2);
+        var cardFirstBeforeTransfer = DataHelper.getCard(1);
+        var cardSecondBeforeTransfer = DataHelper.getCard(2);
         DashBoard.transferBetweenCards(numberCartTo);
-
         CardTransferPage.transferMoney(amountTransfer, cardSecondBeforeTransfer.getNumber());
-        DataHelper.Card cardFirstAfterTransfer = DataHelper.getCard(1);
-        DataHelper.Card cardSecondAfterTransfer = DataHelper.getCard(2);
-
-        assertEquals(cardFirstBeforeTransfer.getBalabce(), cardFirstAfterTransfer.getBalabce());
-        assertEquals(cardSecondBeforeTransfer.getBalabce(), cardSecondAfterTransfer.getBalabce());
-        assertFalse(cardSecondAfterTransfer.getBalabce() > 0 && cardFirstAfterTransfer.getBalabce() > 0);
+        var actual = ErrorPage.errorOnPage();
+        assertEquals("Ошибка", actual);
     }
 
     @Test
@@ -65,7 +59,7 @@ class MoneyTransferNegativeTest {
         String cardNunber = "1234 5678 1234 5678";
         DashBoard.transferBetweenCards(numberCartTo);
         CardTransferPage.transferMoney(amountTransfer, cardNunber);
-        var actual = DashBoard.ErrorOnPage();
+        var actual = ErrorPage.errorOnPage();
         assertEquals("Ошибка", actual);
     }
 }
