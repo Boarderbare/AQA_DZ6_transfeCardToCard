@@ -32,14 +32,13 @@ public class DataHelper {
     @Value
     public static class Card {
         String number;
-        String id;
-        int balabce;
     }
 
     public static Card getCard(int orderNumber) {
         List<Card> cards = new ArrayList<>();
-        cards.add(new Card("5559 0000 0000 0001", DashBoard.getCardId(1), DashBoard.getCardBalance(1)));
-        cards.add(new Card("5559 0000 0000 0002", DashBoard.getCardId(2), DashBoard.getCardBalance(2)));
+        cards.add(new Card("5559 0000 0000 0001"));
+        cards.add(new Card("5559 0000 0000 0002"));
+        cards.add(new Card ("1234 5678 1234 5678"));
         return cards.get(orderNumber - 1);
     }
 }

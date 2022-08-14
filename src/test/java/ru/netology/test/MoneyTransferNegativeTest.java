@@ -9,8 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import ru.netology.page.*;
+import ru.netology.utility.CardBalanceEqual;
 
 class MoneyTransferNegativeTest {
+
+    public
 
     @BeforeEach
     void setup() {
@@ -18,48 +21,46 @@ class MoneyTransferNegativeTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationCode = DataHelper.getVerificationCode(authInfo);
         loginPage.validLogin(authInfo).codeVerify(verificationCode);
-        CardTransferPage.CardBalanceEqual();
+        CardBalanceEqual.cardBalanceEqual();
     }
 
     @Test
     void shouldNoTransferNumberCardSame() {
-
+        DashBoard dashBoard = new DashBoard();
         var amountTransfer = 300;
         var numberCartTo = 1;
-        var cardFirstBeforeTransfer = DataHelper.getCard(1);
-        var cardSecondBeforeTransfer = DataHelper.getCard(2);
-        DashBoard.transferBetweenCards(numberCartTo);
+        var cardFirstBeforeTransfer = dashBoard.getCardBalance(1);
+        var cardSecondBeforeTransfer = dashBoard.getCardBalance(2);
+        dashBoard.transferBetweenCards(numberCartTo)
+            .transferMoney(amountTransfer, DataHelper.getCard(1).getNumber());
+        var cardBalanceFirstAfterTransfer = dashBoard.getCardBalance(1);
+        var cardBalanceSecondAfterTransfer = dashBoard.getCardBalance(2);
 
-        CardTransferPage.transferMoney(amountTransfer, cardFirstBeforeTransfer.getNumber());
-        var cardBalanceFirstAfterTransfer = DataHelper.getCard(1).getBalabce();
-        var cardBalanceSecondAfterTransfer = DataHelper.getCard(2).getBalabce();
-
-        assertEquals(cardFirstBeforeTransfer.getBalabce(), cardBalanceFirstAfterTransfer);
-        assertEquals(cardSecondBeforeTransfer.getBalabce(), cardBalanceSecondAfterTransfer);
+        assertEquals(cardFirstBeforeTransfer, cardBalanceFirstAfterTransfer);
+        assertEquals(cardSecondBeforeTransfer, cardBalanceSecondAfterTransfer);
         assertTrue(cardBalanceSecondAfterTransfer > 0 && cardBalanceFirstAfterTransfer > 0);
     }
 
     @Test
     void shouldNoTransferAmountTooMuch() {
-
+        DashBoard dashBoard = new DashBoard();
         var amountTransfer = 30000;
         var numberCartTo = 1;
-        var cardFirstBeforeTransfer = DataHelper.getCard(1);
-        var cardSecondBeforeTransfer = DataHelper.getCard(2);
-        DashBoard.transferBetweenCards(numberCartTo);
-        CardTransferPage.transferMoney(amountTransfer, cardSecondBeforeTransfer.getNumber());
-        var actual = ErrorPage.errorOnPage();
-        assertEquals("Ошибка", actual);
+        var cardFirstBeforeTransfer = dashBoard.getCardBalance(1);
+        var cardSecondBeforeTransfer = dashBoard.getCardBalance(2);
+        dashBoard.transferBetweenCards(numberCartTo)
+            .transferMoney(amountTransfer, DataHelper.getCard(2).getNumber());
+        assertTrue(new CardTransferPage().errorMassage());
     }
 
     @Test
     void shouldInvalidNumber() {
+        DashBoard dashBoard = new DashBoard();
         var amountTransfer = 300;
         var numberCartTo = 1;
-        String cardNunber = "1234 5678 1234 5678";
-        DashBoard.transferBetweenCards(numberCartTo);
-        CardTransferPage.transferMoney(amountTransfer, cardNunber);
-        var actual = ErrorPage.errorOnPage();
-        assertEquals("Ошибка", actual);
+        var invalidCardNunber = DataHelper.getCard(3).getNumber();
+        dashBoard.transferBetweenCards(numberCartTo)
+            .transferMoney(amountTransfer, invalidCardNunber);
+        assertTrue(new CardTransferPage().errorMassage());
     }
 }
