@@ -31,8 +31,7 @@ public class CardTransferPage {
         numberCardField.setValue(number);
         buttonTransfer.click();
     }
-    public boolean errorMassage() {
+    public void errorMessage() {
         SelenideElement error = $(byText("Ошибка")).shouldBe(visible);
-        return error.text().equals("Ошибка");
     }
 }

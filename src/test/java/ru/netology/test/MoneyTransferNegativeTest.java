@@ -50,7 +50,8 @@ class MoneyTransferNegativeTest {
         var cardSecondBeforeTransfer = dashBoard.getCardBalance(2);
         dashBoard.transferBetweenCards(numberCartTo)
             .transferMoney(amountTransfer, DataHelper.getCard(2).getNumber());
-        assertTrue(new CardTransferPage().errorMassage());
+        CardTransferPage cardTransferPage = new CardTransferPage();
+        cardTransferPage.errorMessage();
     }
 
     @Test
@@ -61,6 +62,7 @@ class MoneyTransferNegativeTest {
         var invalidCardNunber = DataHelper.getCard(3).getNumber();
         dashBoard.transferBetweenCards(numberCartTo)
             .transferMoney(amountTransfer, invalidCardNunber);
-        assertTrue(new CardTransferPage().errorMassage());
+        CardTransferPage cardTransferPage = new CardTransferPage();
+        cardTransferPage.errorMessage();
     }
 }
